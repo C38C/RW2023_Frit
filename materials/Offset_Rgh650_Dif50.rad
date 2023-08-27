@@ -1,0 +1,9 @@
+void trans dots
+0
+0
+7 1.00000000 1.00000000 1.00000000 0 0.65000 1.00000000 0.50000000
+
+void mixfunc perforated_s5_r4
+6 void dots uv_hole perforate_offset.cal -s .05
+0
+1 0.35685

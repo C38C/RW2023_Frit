@@ -1,0 +1,9 @@
+void trans dots
+0
+0
+7 1.00000000 1.00000000 1.00000000 0 0.065 1.00000000 0.800
+
+void mixfunc perforated_s5_r4
+6 void dots uv_hole_flip perforate_offset_gradient.cal -s .05
+0
+2 0.6 1.25

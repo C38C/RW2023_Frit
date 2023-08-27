@@ -1,0 +1,32 @@
+{
+	perforate_offset.cal
+	
+	A perforation function for mixfuncs with offset holes  for planar sufaces.
+	Foreground is solid, background the holes. 
+	
+	The relative hole size to a U,V division is determined by A1.
+	-s is a scaling parameter.
+	
+	J. Alstan Jakubiec, 2023 - Added UV staggering of holes
+	Built upon the work of: Abel Boerema 2004, n.a.v.Georg Mischler 30. 04. 1993
+}
+
+
+{uv coordinate mapping}
+un = mod(U, 1) - 0.5;
+vn = mod(V, 1) - 0.5;
+
+{separate rules for alternating U coordinates}
+even_odd = mod(U, 2) - 1.0;
+
+{even holes}
+even = if(sqrt(un*un + vn*vn) - A1, 1, 0);
+
+{odd holes, need to be joined to work with the planar U,V subdivisions}
+odd_top = if(sqrt(un*un + (vn+0.5)*(vn+0.5)) - A1, 1, 0);
+odd_bottom = if(sqrt(un*un + (vn-0.5)*(vn-0.5)) - A1, 1, 0);
+
+{final holes}
+outofcirc = if(even_odd, even, and(odd_top, odd_bottom));
+
+uv_hole = outofcirc;

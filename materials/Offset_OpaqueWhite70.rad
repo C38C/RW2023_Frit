@@ -1,0 +1,9 @@
+void plastic dots
+0
+0
+5 0.7 0.7 0.7 0.0 0.0
+
+void mixfunc perforated_s5_r4
+6 void dots uv_hole perforate_offset.cal -s .05
+0
+1 0.35685

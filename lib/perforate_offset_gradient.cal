@@ -1,0 +1,47 @@
+{
+	perforate_offset_gradient.cal
+	
+	A perforation function for mixfuncs with offset holes for planar sufaces.
+	A new parameter controls the circle radius as a function of distance along the surface.
+	Foreground is solid, background the holes. 
+	
+	The relative hole size to a U,V division is determined by A1.
+	The distance along the V-axis in world units where the circle radius is 0 is determined by A2. For example, 1.5 means the circles radius goes to 0 1.5 [units] up the surface.
+	-s is a scaling parameter.
+	
+	Use uv_hole for bottom-to-top gradients.
+	Use uv_hole_flip for top-to-bottom gradients. 
+	
+	J. Alstan Jakubiec, 2023 - Added UV staggering of holes and V-gradient
+	Built upon the work of: Abel Boerema 2004, n.a.v.Georg Mischler 30. 04. 1993
+}
+
+{uv coordinate mapping}
+un = mod(U, 1) - 0.5;
+vn = mod(V, 1) - 0.5;
+
+{separate rules for alternating U coordinates}
+even_odd = mod(U, 2) - 1.0;
+
+{shifting radius along V-axis}
+dist_v = if(A2 - V/S, A2 - V/S, 0);
+radius = if(dist_v, A1 * (dist_v / A2), 0);
+dist_v_flip = if(A2 - V/S, 0, abs(A2 - V/S));
+radius_flip = A1 * (dist_v_flip / A2);
+
+{even holes}
+even = if(sqrt(un*un + vn*vn) - radius, 1, 0);
+even_flip = if(sqrt(un*un + vn*vn) - radius_flip, 1, 0);
+
+{odd holes, need to be joined to work with the planar U,V subdivisions}
+odd_top = if(sqrt(un*un + (vn+0.5)*(vn+0.5)) - radius, 1, 0);
+odd_bottom = if(sqrt(un*un + (vn-0.5)*(vn-0.5)) - radius, 1, 0);
+odd_top_flip = if(sqrt(un*un + (vn+0.5)*(vn+0.5)) - radius_flip, 1, 0);
+odd_bottom_flip = if(sqrt(un*un + (vn-0.5)*(vn-0.5)) - radius_flip, 1, 0);
+
+{final holes}
+outofcirc = if(even_odd, even, and(odd_top, odd_bottom));
+outofcirc_flip = if(even_odd, even_flip, and(odd_top_flip, odd_bottom_flip));
+
+uv_hole = outofcirc;
+uv_hole_flip = outofcirc_flip;
